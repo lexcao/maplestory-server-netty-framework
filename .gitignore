@@ -11,6 +11,14 @@
 .springBeans
 .sts4-cache
 .dat
+.class
+.log
+.ctxt
+.jar
+.war
+.zip
+.tar.gz
+.rar
 
 .idea
 *.iws

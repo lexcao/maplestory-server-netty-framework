@@ -9,7 +9,6 @@ apply plugin: 'kotlin-jpa'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'maple.story'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -17,6 +16,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.hibernate.validator:hibernate-validator:6.0.13.Final'
     implementation 'io.netty:netty-all:4.1.32.Final'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.flywaydb:flyway-core'

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="system" value="log/system"/>
+    <property name="admin" value="log/admin"/>
+    <property name="debug" value="log/debug"/>
+    <property name="backup" value="log/backup"/>
+
+    <!-- appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.out</Target>
+        <encoder>
+            <pattern>
+                %date [%level] [%thread] %logger{80} [%file : %line] %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="TRADE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>
+                %date [%level] [%thread] %logger{80} [%file : %line] %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${backup}/%d{yyyy-MM-dd}/trade.log
+            </fileNamePattern>
+            <MaxHistory>7</MaxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>
+                %date [%level] [%thread] %logger{80} [%file : %line] %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${system}/%d{yyyy-MM-dd}/sql.log
+            </fileNamePattern>
+            <MaxHistory>7</MaxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- logger -->
+    <logger name="trade" level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="TRADE"/>
+    </logger>
+
+    <!-- sql -->
+    <logger name="org.hibernate.SQL" level="trace" additivity="false">
+        <appender-ref ref="SQL"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <!--<appender-ref ref="ALL"/>-->
+    </root>
+</configuration>

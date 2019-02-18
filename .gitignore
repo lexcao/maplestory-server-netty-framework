@@ -1,6 +1,7 @@
 .DS_STORE
 .gradle
 /build/
+/log/
 !gradle/wrapper/gradle-wrapper.jar
 
 .apt_generated

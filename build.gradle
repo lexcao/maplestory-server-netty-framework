@@ -6,6 +6,7 @@ plugins {
 }
 
 apply plugin: 'kotlin-jpa'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'maple.story'

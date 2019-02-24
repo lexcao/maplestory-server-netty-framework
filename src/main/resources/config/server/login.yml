@@ -1,0 +1,26 @@
+port: 6001
+
+# 服务器版本号
+version: 99
+# 补丁版本号
+patch: 1
+# 区域类型
+type: 4
+# 游戏名
+name: star maplestory
+# 频道选择界面公告
+event-message: 频道选择界面公告
+# 游戏置顶公告
+message: 游戏置顶公告
+# 区服名称 蓝蜗牛
+flag: 0
+# 服务器运行状态
+status: 3
+# 最大在线用户
+max-user-limit: 100
+# 默认最大在线用户（虚假在线人数）
+default-user-limit: 100
+# 是否使用 SHA-1 加密
+enable-user-hash: true
+# 是否启动删除角色
+enable-delete-character: false

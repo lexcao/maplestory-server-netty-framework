@@ -1,12 +1,12 @@
-package maple.story.star.netty
+package maple.story.star.netty.common.encode
 
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToByteEncoder
-import maple.story.star.netty.action.SendCode
+import maple.story.star.netty.code.SendCode
+import maple.story.star.netty.domain.MaplePacket
 import maple.story.star.netty.extension.bytes
 import maple.story.star.netty.extension.client
-import maple.story.star.netty.extension.send
 
 class MaplePacketEncoder : MessageToByteEncoder<ByteBuf>() {
 
@@ -28,11 +28,20 @@ class MaplePacketEncoder : MessageToByteEncoder<ByteBuf>() {
         // TODO get op code and log
         val operation = SendCode.of(packet.id)
 
-        val header = client.AES.generateHeader(packet.length)
+        val header = client.header(packet.length)
 
         // TODO lock ?
-        val encrypted = client.AES.encrypt(packet.data).bytes()
+        val encrypted = client.encrypt(packet.data).bytes()
 
         outbound.writeBytes(header + encrypted)
+    }
+
+    private fun ByteBuf.send(): MaplePacket {
+        val id = readShortLE().toInt()
+        val data = readSlice(readableBytes())
+        return MaplePacket(
+            id = id,
+            data = data
+        )
     }
 }

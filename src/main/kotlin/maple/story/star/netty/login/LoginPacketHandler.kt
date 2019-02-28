@@ -5,7 +5,6 @@ import io.netty.buffer.Unpooled
 import io.netty.util.internal.StringUtil
 import maple.story.star.client.MapleClient
 import maple.story.star.constant.MapleVersion
-import maple.story.star.netty.extension.bytes
 import maple.story.star.netty.extension.compact
 import maple.story.star.netty.extension.print
 import maple.story.star.netty.extension.readAscii
@@ -20,14 +19,15 @@ object LoginPacketHandler : KLogging() {
     fun hello(
         client: MapleClient
     ): ByteBuf {
+        // TODO change unpooled to channel.alloc().buffer
         val buffer = Unpooled.buffer(32)
-        buffer.writeShortLE(15) // length
+        buffer.writeShortLE(16) // length
             .writeShortLE(MapleVersion.INT) // version 143
             .writeAscii("1") // patch string
 
-            .writeBytes(client.AES.recvIV.iv.bytes()) // receive iv
-            .writeBytes(client.AES.sendIV.iv.bytes()) // send iv
-            .writeByte(MapleVersion.LOGIN_MAPLE_TYPE)
+            .writeBytes(client.recvIV()) // receive iv
+            .writeBytes(client.sendIV()) // send iv
+            .writeShortLE(MapleVersion.LOGIN_MAPLE_TYPE)
 
             .writeByte(1) // end
 

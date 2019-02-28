@@ -1,7 +1,7 @@
 package maple.story.star.config
 
 //@Configuration
-//@PropertySource("classpath:config/server/login.yml")
+//@PropertySource("classpath:config/server/needLogin.yml")
 //@ConfigurationProperties
 class ServerConfig {
 

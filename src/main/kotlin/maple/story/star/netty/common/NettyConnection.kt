@@ -6,40 +6,33 @@ import io.netty.channel.ChannelOption
 import io.netty.channel.EventLoopGroup
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioServerSocketChannel
-import mu.KLogging
+import maple.story.star.netty.common.initial.ServerInitializer
 
 class NettyConnection(
-    private val port: Int,
-    private val world: Int = -1,
-    private val channels: Int = -1
+    port: Int,
+    server: MapleServer
 ) {
-
-    private companion object : KLogging()
 
     private val boss: EventLoopGroup = NioEventLoopGroup()
     private val work: EventLoopGroup = NioEventLoopGroup()
-    private lateinit var channel: Channel
+    private val channel: Channel
 
-    fun run() {
-        try {
-            val server = ServerBootstrap()
-                .group(boss, work)
-                .channel(NioServerSocketChannel::class.java)
-                .option(ChannelOption.SO_BACKLOG, ServerConstants.MAX_CONNECTIONS)
-                .childOption(ChannelOption.TCP_NODELAY, true)
-                .childOption(ChannelOption.SO_KEEPALIVE, true)
-                .childHandler(ServerInitializer())
 
-            val future = server.bind(port).sync()
-            logger.info("start server at port [{}]", port)
-            channel = future.channel()
-            channel.closeFuture().sync()
-        } finally {
-//            close()
-        }
+    init {
+        val boot = ServerBootstrap()
+            .group(boss, work)
+            .channel(NioServerSocketChannel::class.java)
+            .option(ChannelOption.SO_BACKLOG, 1_000)
+            .childAttr(MapleServer.SERVER, server)
+            .childOption(ChannelOption.TCP_NODELAY, true)
+            .childOption(ChannelOption.SO_KEEPALIVE, true)
+            .childHandler(ServerInitializer())
+
+        channel = boot.bind(port).sync().channel()
+            .closeFuture().channel()
     }
 
-    fun close() {
+    fun shutdown() {
         channel.close()
         boss.shutdownGracefully()
         work.shutdownGracefully()

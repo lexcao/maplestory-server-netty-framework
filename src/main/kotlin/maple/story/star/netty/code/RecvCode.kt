@@ -1,6 +1,9 @@
-package maple.story.star.netty.action
+package maple.story.star.netty.code
 
-enum class RecvCode(val code: Int, val needLoggin: Boolean = true) {
+enum class RecvCode(
+    val id: Int,
+    val auth: Boolean = true
+) {
 
     // TODO split file
     LOGIN(0x6969, false),
@@ -320,7 +323,7 @@ enum class RecvCode(val code: Int, val needLoggin: Boolean = true) {
     UNKNOWN(-1);
 
     companion object {
-        private val codes = values().associateBy(RecvCode::code)
+        private val codes = values().associateBy(RecvCode::id)
         fun of(code: Int): RecvCode = codes[code] ?: RecvCode.UNKNOWN
     }
 }

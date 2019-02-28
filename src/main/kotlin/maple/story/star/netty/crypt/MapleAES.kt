@@ -3,6 +3,7 @@ package maple.story.star.netty.crypt
 import io.netty.buffer.ByteBuf
 import maple.story.star.constant.MapleVersion
 import maple.story.star.netty.domain.IVInfo
+import maple.story.star.netty.domain.MaplePacket
 import maple.story.star.netty.extension.bytes
 import maple.story.star.netty.extension.toByteBuf
 import javax.crypto.BadPaddingException
@@ -24,12 +25,13 @@ class MapleAES {
     }
 
     // --------------------- public
-    fun validReceivedPacketId(id: Int): Boolean {
+    fun valid(packet: MaplePacket): Boolean {
+        val id = packet.id
         val iv = recvIV.iv
         val version = recvIV.version
         // [69. 69] packet id
         // FIXME just for packet id , need fix
-        val packet = intArrayOf(
+        val packetArray = intArrayOf(
             (id shr 8) and 0xFF,
             (id shr 0) and 0xFF
         )
@@ -44,7 +46,7 @@ class MapleAES {
         // 0001 0011
         // and & 1111 1111
         // 19
-        val a1 = (packet[0] xor iv[2]) and 0xFF// 19
+        val a1 = (packetArray[0] xor iv[2]) and 0xFF// 19
 
         // ((mapleVersion >> 8) & 0xFF))
         // version 8F
@@ -63,14 +65,12 @@ class MapleAES {
         // and & 1111 1111
         // 0101 1010
         // 0x5A
-        val b1 = (packet[1] xor iv[3]) and 0xFF // 0x5A
+        val b1 = (packetArray[1] xor iv[3]) and 0xFF // 0x5A
 
         // (mapleVersion & 0xFF)));
         val b2 = version and 0xFF // 8F
 
-        val result = a1 == a2 && b1 == b2
-
-        return result
+        return a1 == a2 && b1 == b2
     }
 
 

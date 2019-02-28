@@ -1,13 +1,15 @@
 package maple.story.star.server
 
-import maple.story.star.netty.login.LoginServer
+import maple.story.star.netty.common.MapleServer
 import mu.KLogging
+import org.springframework.beans.factory.ObjectProvider
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
 @Component
 class Start(
-    val loginServer: LoginServer
+    val servers: ObjectProvider<MapleServer>,
+    val stop: Thread
 ) {
 
     private companion object : KLogging()
@@ -39,15 +41,11 @@ class Start(
         // TODO 竞速排行榜
         // TODO trade
 
-        logger.info("[server-login] starting")
-        loginServer.startup()
-        logger.info("[server-login] finish start")
-        // TODO get server
-        // TODO cash shop server
-        // TODO trade server
-        // TODO chat server
+        servers.map(MapleServer::startup)
 
         // TODO other
 
+        Runtime.getRuntime().addShutdownHook(stop)
+        // start finish
     }
 }

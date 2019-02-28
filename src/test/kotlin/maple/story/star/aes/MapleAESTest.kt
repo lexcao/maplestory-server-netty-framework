@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import maple.story.star.constant.MapleVersion
 import maple.story.star.netty.crypt.MapleAES
+import maple.story.star.netty.domain.MaplePacket
 import maple.story.star.netty.extension.bytes
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -63,7 +64,12 @@ class MapleAESTest {
         recvMessage.resetReaderIndex()
         val packetId = recvMessage.readShortLE().toInt()
         val old = oldRecv.checkPacket(header)
-        val newCheck = new.validReceivedPacketId(packetId)
+        val newCheck = new.valid(
+            MaplePacket(
+                id = packetId,
+                data = recvMessage.readSlice(recvMessage.readableBytes())
+            )
+        )
         assertThat(newCheck).isEqualTo(old)
         assertThat(newCheck).isTrue()
     }
@@ -87,11 +93,12 @@ class MapleAESTest {
     fun encrypt() {
         val newIV = new.sendIV.iv.bytes()
         val oldIV = oldSend.iv
+        val origin = sendMessage.bytes()
         assertThat(newIV).isEqualTo(oldIV)
         val newDecrypt = new.encrypt(sendMessage).bytes()
-        decrypt(newDecrypt)
+        decrypt(newDecrypt, origin)
         val oldDecrypt = oldSend.crypt(sendMessage.bytes())
-        decrypt(oldDecrypt)
+        decrypt(oldDecrypt, origin)
     }
 
     @Test
@@ -101,9 +108,10 @@ class MapleAESTest {
         assertThat(newDecrypt).isEqualTo(oldDecrypt)
     }
 
-    fun decrypt(data: ByteArray) {
+    fun decrypt(data: ByteArray, origin: ByteArray) {
         val newDecrypt = new.decrypt(Unpooled.wrappedBuffer(data)).bytes()
         val oldDecrypt = oldRecv.crypt(data)
         assertThat(newDecrypt).isEqualTo(oldDecrypt)
+        assertThat(newDecrypt).isEqualTo(origin)
     }
 }

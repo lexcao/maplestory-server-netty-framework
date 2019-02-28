@@ -1,4 +1,4 @@
-package maple.story.star.netty.action
+package maple.story.star.netty.code
 
 enum class SendCode(val code: Int) {
 

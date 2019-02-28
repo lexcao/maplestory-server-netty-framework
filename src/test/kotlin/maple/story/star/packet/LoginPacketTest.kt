@@ -1,9 +1,10 @@
 package maple.story.star.packet
 
+import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import io.netty.channel.socket.nio.NioSocketChannel
 import maple.story.star.client.MapleClient
-import maple.story.star.netty.extension.receive
+import maple.story.star.netty.domain.MaplePacket
 import maple.story.star.netty.login.LoginPacketHandler
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -29,15 +30,35 @@ class LoginPacketTest {
     @Test
     fun `ByteBuf to maple common packet`() {
         val inbound = Unpooled.wrappedBuffer(commonPacket)
-        val packet = inbound.receive()
+        val packet = inbound.common()
         println(packet)
     }
+
+    private fun ByteBuf.common(): MaplePacket {
+        val id = readShortLE().toInt()
+        val data = readSlice(readableBytes())
+        return MaplePacket(
+            id = id,
+            data = data
+        )
+    }
+
 
     @Test
     fun `ByteBuf to maple login packet`() {
         val inbound = Unpooled.wrappedBuffer(loginPacket)
-        val packet = inbound.receive()
+        val packet = inbound.login()
         println(packet)
+    }
+
+    private fun ByteBuf.login(): MaplePacket {
+        val id = readShortLE().toInt()
+        skipBytes(Short.SIZE_BYTES)
+        val data = readSlice(readableBytes())
+        return MaplePacket(
+            id = id,
+            data = data
+        )
     }
 
     @Test

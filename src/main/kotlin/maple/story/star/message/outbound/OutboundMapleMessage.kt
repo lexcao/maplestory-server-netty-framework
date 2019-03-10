@@ -1,11 +1,11 @@
 package maple.story.star.message.outbound
 
 import io.netty.buffer.ByteBuf
-import maple.story.star.netty.code.SendCode
+import maple.story.star.code.Send
 
 interface OutboundMapleMessage {
 
-    val code: SendCode
+    val code: Send
 
-    fun packet(out: ByteBuf): ByteBuf
+    fun packet(out: ByteBuf)
 }

@@ -3,8 +3,11 @@ package maple.story.star.netty.common.decode
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.ByteToMessageDecoder
+import maple.story.star.code.Recv
+import maple.story.star.netty.common.handler.MaplePacketDecrypt
 import maple.story.star.netty.domain.MaplePacket
 import maple.story.star.netty.extension.client
+import maple.story.star.netty.extension.compact
 import mu.KLogging
 
 class MaplePacketDecoder : ByteToMessageDecoder() {
@@ -18,23 +21,44 @@ class MaplePacketDecoder : ByteToMessageDecoder() {
     ) {
         val client = context.client() ?: return
 
-        val decrypted = client.decrypt(inbound)
+        if (inbound.readableBytes() < 4) {
+            return
+        }
 
-        val packet = decrypted.packet()
+        val packet = inbound.packet()
+        logger.info { packet }
 
-        if (packet.needLogin() && !client.login) return
+        if (!client.login && isLoginPacket(packet.id)) {
+            context.pipeline().remove(MaplePacketDecrypt::class.java)
+            context.fireChannelRead(packet)
+            return
+        }
+
+        if (!client.valid(packet) && !client.receiving) {
+            context.channel().disconnect()
+            return
+        }
+
+        if (packet.data.readableBytes() < 2) {
+            return
+        }
 
         message.add(packet)
     }
 
+    private fun isLoginPacket(id: Int) = id == Recv.LOGIN.id
+
     private fun ByteBuf.packet(): MaplePacket {
         val id = readShortLE().toInt()
-        val data = readSlice(readableBytes())
+        val len = readShortLE().toInt()
+
+        val length: Int = if (isLoginPacket(id)) len
+        else id xor len
+
+        val data = compact(length)
         return MaplePacket(
             id = id,
             data = data
         )
     }
-
-    private fun MaplePacket.needLogin(): Boolean = action.auth
 }

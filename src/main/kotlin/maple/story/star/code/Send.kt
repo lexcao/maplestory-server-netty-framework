@@ -1,6 +1,6 @@
-package maple.story.star.netty.code
+package maple.story.star.code
 
-enum class SendCode(val code: Int) {
+enum class Send(val id: Int) {
 
     LOGIN_STATUS(0x0),
     CHAT_SERVER_STATUS(0x1),
@@ -506,7 +506,7 @@ enum class SendCode(val code: Int) {
     UNKNOWN(-1);
 
     companion object {
-        private val codes = SendCode.values().associateBy(SendCode::code)
-        fun of(code: Int): SendCode = codes[code] ?: SendCode.UNKNOWN
+        private val codes = Send.values().associateBy(Send::id)
+        fun of(code: Int): Send = codes[code] ?: Send.UNKNOWN
     }
 }

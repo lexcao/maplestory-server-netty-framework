@@ -4,11 +4,12 @@ import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import io.netty.channel.socket.nio.NioSocketChannel
 import maple.story.star.client.MapleClient
+import maple.story.star.handler.HelloHandler
+import maple.story.star.message.inbound.LoginInbound
 import maple.story.star.netty.domain.MaplePacket
-import maple.story.star.netty.login.LoginPacketHandler
+import maple.story.star.netty.extension.print
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import kotlin.random.Random
 
 class LoginPacketTest {
 
@@ -61,30 +62,37 @@ class LoginPacketTest {
         )
     }
 
+    /**
+    val ivRecv = intArrayOf(
+    70, 114, 122,
+    Random.nextBits(Byte.SIZE_BITS)
+    )
+    val ivSend = intArrayOf(
+    82, 48, 120,
+    Random.nextBits(Byte.SIZE_BITS)
+    )
+    val mapleVersion = 143
+     */
+
     @Test
     fun `Response in hello packet`() {
-        val ivRecv = intArrayOf(
-            70, 114, 122,
-            Random.nextBits(Byte.SIZE_BITS)
-        )
-        val ivSend = intArrayOf(
-            82, 48, 120,
-            Random.nextBits(Byte.SIZE_BITS)
-        )
-        val mapleVersion = 143
-        LoginPacketHandler.hello(
+        val hello = HelloHandler.hello(
             MapleClient(session = NioSocketChannel())
         )
+        val packet = Unpooled.buffer()
+        hello.packet(packet)
+        println(packet.print())
     }
 
     @Test
     fun `mac string from byte buf`() {
-        val bytes = byteArrayOf(
-//            0, 0, 0, 0, 0, 0
-            0x10, 0xBF.toByte(), 0x48, 0x7B, 0x10, 0x8B.toByte()
-        )
-        val data = Unpooled.wrappedBuffer(bytes)
-        val mac = LoginPacketHandler.getMacAddress(data)
+        /* val bytes = byteArrayOf(
+ //            0, 0, 0, 0, 0, 0
+             0x10, 0xBF.toByte(), 0x48, 0x7B, 0x10, 0x8B.toByte()
+         )*/
+        val data = Unpooled.wrappedBuffer(loginPacket)
+        val inbound = LoginInbound(data)
+        val mac = inbound.mac
         assertThat(mac).isEqualTo(
 //            "00-00-00-00-00-00"
             "10-BF-48-7B-10-8B"
@@ -93,17 +101,17 @@ class LoginPacketTest {
 
     @Test
     fun `username and password from buf`() {
-        val bytes = byteArrayOf(
+/*        val bytes = byteArrayOf(
             0x07, 0, 0x72, 0x6F, 0x6F, 0x74, 0x31, 0x32, 0x33,
             0x07, 0, 0x72, 0x6F, 0x6F, 0x74, 0x31, 0x32, 0x33
-        )
-        val data = Unpooled.wrappedBuffer(bytes)
-        val (username, password) = LoginPacketHandler.getLoginInfo(data)
+        )*/
+        val data = Unpooled.wrappedBuffer(loginPacket)
+
+        val inbound = LoginInbound(data)
+        val username = inbound.username
+        val password = inbound.password
 
         assertThat(username).isEqualTo("root123")
         assertThat(username).isEqualTo(password)
     }
-
-    fun IntArray.bytes(): ByteArray =
-        this.map(Int::toByte).toByteArray()
 }

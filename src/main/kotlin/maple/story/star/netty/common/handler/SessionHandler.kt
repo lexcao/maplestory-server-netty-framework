@@ -4,11 +4,12 @@ import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
 import maple.story.star.client.MapleClient
-import maple.story.star.netty.extension.clear
+import maple.story.star.handler.HelloHandler
 import maple.story.star.netty.extension.client
+import maple.story.star.netty.extension.closeClient
+import maple.story.star.netty.extension.compact
 import maple.story.star.netty.extension.ip
 import maple.story.star.netty.extension.server
-import maple.story.star.netty.login.LoginPacketHandler
 import mu.KLogging
 
 @ChannelHandler.Sharable
@@ -16,28 +17,33 @@ class SessionHandler : ChannelInboundHandlerAdapter() {
 
     companion object : KLogging()
 
-    override fun channelActive(ctx: ChannelHandlerContext) {
-        val ip = ctx.ip()
+    override fun channelActive(context: ChannelHandlerContext) {
+        val ip = context.ip()
 
         // TODO block ip here
-        // if () ctx.get().close() return
+        // if () context.get().close() return
 
         // TODO limit ip
         limit(ip)
 
 //        if (isShutDown()) {
-//            ctx.channel().close()
+//            context.channel().close()
 //            return
 //        }
 
-        val session = ctx.channel()
+        val session = context.channel()
         val client = MapleClient(session)
 
-        session.writeAndFlush(LoginPacketHandler.hello(client))
+        val hello = HelloHandler.hello(client)
+        val buffer = context.alloc().buffer()
+        hello.packet(buffer)
 
-        ctx.client(client)
+        val packet = buffer.compact()
+        context.writeAndFlush(packet)
 
-        val server = ctx.server()
+        context.client(client)
+
+        val server = context.server()
         logger.info("[${server.name}] Session : ip[{}]", ip)
     }
 
@@ -57,10 +63,9 @@ class SessionHandler : ChannelInboundHandlerAdapter() {
             try {
                 disconnect(true, false, false)
             } catch (e: Exception) {
-                MapleServerHandler.logger.error("连接异常关闭", e)
+                logger.error("连接异常关闭", e)
             } finally {
-                ctx.clear()
-                ctx.channel().close()
+                ctx.closeClient()
             }
         }
     }

@@ -29,3 +29,8 @@ fun ChannelHandlerContext.ip(): String =
 fun ChannelHandlerContext.clear() {
     channel().attr(MapleClient.CLIENT).set(null)
 }
+
+fun ChannelHandlerContext.closeClient() {
+    clear()
+    channel().close()
+}

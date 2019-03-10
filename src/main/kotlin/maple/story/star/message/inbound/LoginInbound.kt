@@ -16,6 +16,7 @@ data class LoginInbound(
         mac = getMacAddress(data)
         data.skipBytes(15)
         username = data.readAscii()
+        data.skipBytes(Short.SIZE_BYTES)
         password = data.readAscii()
     }
 

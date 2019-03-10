@@ -10,4 +10,5 @@ object MapleVersion {
     val SHORT_REVERSE: Int = (0xFFFF - INT).shortLE()
 
     const val LOGIN_MAPLE_TYPE: Int = 4
+    const val MAPLE_PATCH_STRING: String = "1"
 }

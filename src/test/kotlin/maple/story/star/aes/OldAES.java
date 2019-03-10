@@ -1,6 +1,5 @@
 package maple.story.star.aes;
 
-import io.netty.util.internal.StringUtil;
 import maple.story.star.netty.crypt.SecretKeySpecFactory;
 
 import javax.crypto.BadPaddingException;
@@ -9,6 +8,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 public class OldAES {
 
@@ -162,6 +162,6 @@ public class OldAES {
 
     @Override
     public String toString() {
-        return "IV: " + StringUtil.toHexString(this.iv);
+        return "IV: " + Arrays.toString(this.iv);
     }
 }

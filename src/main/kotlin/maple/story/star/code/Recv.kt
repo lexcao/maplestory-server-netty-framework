@@ -1,11 +1,10 @@
-package maple.story.star.netty.code
+package maple.story.star.code
 
-enum class RecvCode(
+enum class Recv(
     val id: Int,
     val auth: Boolean = true
 ) {
 
-    // TODO split file
     LOGIN(0x6969, false),
 
     PONG(0x94, false),
@@ -32,7 +31,7 @@ enum class RecvCode(
     DELETE_CHAR(0x80),
     PART_TIME_JOB(0x8e),
     CHARACTER_CARDS(0x8f),
-    REQUEST_CONNECTION(0x99),
+    REQUEST_CONNECTION(0x99, false),
     LICENSE_REQUEST(0x9d),
     SET_GENDER(0x9e),
     CHAR_SELECTED(0x9f),
@@ -323,7 +322,7 @@ enum class RecvCode(
     UNKNOWN(-1);
 
     companion object {
-        private val codes = values().associateBy(RecvCode::id)
-        fun of(code: Int): RecvCode = codes[code] ?: RecvCode.UNKNOWN
+        private val codes = values().associateBy(Recv::id)
+        fun of(code: Int): Recv = codes[code] ?: Recv.UNKNOWN
     }
 }

@@ -17,7 +17,6 @@ class NettyConnection(
     private val work: EventLoopGroup = NioEventLoopGroup()
     private val channel: Channel
 
-
     init {
         val boot = ServerBootstrap()
             .group(boss, work)

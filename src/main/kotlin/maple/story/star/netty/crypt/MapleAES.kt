@@ -1,11 +1,11 @@
 package maple.story.star.netty.crypt
 
 import io.netty.buffer.ByteBuf
+import io.netty.buffer.Unpooled
 import maple.story.star.constant.MapleVersion
 import maple.story.star.netty.domain.IVInfo
 import maple.story.star.netty.domain.MaplePacket
 import maple.story.star.netty.extension.bytes
-import maple.story.star.netty.extension.toByteBuf
 import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 import javax.crypto.IllegalBlockSizeException
@@ -129,9 +129,15 @@ class MapleAES {
             e.printStackTrace()
         }
 
-        return origin.toByteBuf()
+        return Unpooled.wrappedBuffer(origin)
     }
 
+    private operator fun ByteBuf.get(index: Int): Byte =
+        this.getByte(index)
+
+    private operator fun ByteBuf.set(index: Int, value: Byte) {
+        this.setByte(index, value.toInt())
+    }
 
     private fun multiplyBytes(
         iv: IntArray,

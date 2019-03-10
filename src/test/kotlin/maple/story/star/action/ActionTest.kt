@@ -3,9 +3,9 @@ package maple.story.star.action
 import io.netty.buffer.Unpooled
 import io.netty.channel.embedded.EmbeddedChannel
 import maple.story.star.client.MapleClient
+import maple.story.star.code.Recv
 import maple.story.star.netty.action.ActionProcessor
 import maple.story.star.netty.action.reflect.CallableAction
-import maple.story.star.netty.code.RecvCode
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,10 +37,10 @@ class ActionTest {
     fun `it works`() {
         val data = Unpooled.wrappedBuffer(loginPacket)
         val client = MapleClient(session = EmbeddedChannel())
-        actions[RecvCode.UNKNOWN.id]!!.call(data.duplicate(), client)
+        actions[Recv.UNKNOWN.id]!!.call(data.duplicate(), client)
         actions[0x6969]!!.call(data.duplicate(), client)
-        actions[RecvCode.NOTE_ACTION.id]!!.call(data.duplicate(), client)
-        actions[RecvCode.ADD_ATTACK_RESET.id]!!.call(data.duplicate(), client)
-        actions[RecvCode.AUTO_AGGRO.id]!!.call(data.duplicate(), client)
+        actions[Recv.NOTE_ACTION.id]!!.call(data.duplicate(), client)
+        actions[Recv.ADD_ATTACK_RESET.id]!!.call(data.duplicate(), client)
+        actions[Recv.AUTO_AGGRO.id]!!.call(data.duplicate(), client)
     }
 }

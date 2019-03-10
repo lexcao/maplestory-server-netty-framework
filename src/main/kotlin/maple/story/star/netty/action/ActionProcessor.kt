@@ -4,6 +4,7 @@ import maple.story.star.client.MapleClient
 import maple.story.star.netty.action.reflect.CallableAction
 import maple.story.star.netty.action.resolver.ArgumentResolver
 import maple.story.star.netty.domain.MaplePacket
+import maple.story.star.netty.extension.hex
 import mu.KLogging
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.stereotype.Controller
@@ -45,8 +46,8 @@ class ActionProcessor(
                 "Unknown packet [$packet] action [$action] "
             )
         }
+        logger.info { "process action ${action.id.hex()}" }
         // TODO handle exception
         return action.call(packet.data, client)
     }
-
 }

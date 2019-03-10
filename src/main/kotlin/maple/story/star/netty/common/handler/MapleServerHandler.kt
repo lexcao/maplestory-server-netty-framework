@@ -1,11 +1,14 @@
 package maple.story.star.netty.common.handler
 
+import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
+import maple.story.star.message.outbound.OutboundMapleMessage
 import maple.story.star.netty.action.ActionProcessor
 import maple.story.star.netty.domain.MaplePacket
 import maple.story.star.netty.extension.client
+import maple.story.star.netty.extension.compact
 import mu.KLogging
 import org.springframework.stereotype.Component
 
@@ -28,12 +31,21 @@ class MapleServerHandler(
 //            return
 //        }
 
-        val result = actionProcessor.process(
-            packet, client
-        )
+        val result = actionProcessor.process(packet, client)
 
-        // handle result
+        if (result is OutboundMapleMessage) {
+            // TODO handle broadcast
+            val out = result.packet(context)
+            context.writeAndFlush(out)
+        }
+    }
 
-        client.session.writeAndFlush(result)
+    private fun OutboundMapleMessage.packet(
+        context: ChannelHandlerContext
+    ): ByteBuf {
+        // TODO handle buffer size greater than 256
+        val buffer = context.alloc().buffer()
+        packet(buffer)
+        return buffer.compact()
     }
 }

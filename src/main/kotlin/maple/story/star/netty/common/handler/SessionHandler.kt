@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
 import maple.story.star.client.MapleClient
-import maple.story.star.handler.HelloHandler
+import maple.story.star.controller.SessionController
 import maple.story.star.netty.extension.client
 import maple.story.star.netty.extension.closeClient
 import maple.story.star.netty.extension.compact
@@ -34,7 +34,7 @@ class SessionHandler : ChannelInboundHandlerAdapter() {
         val session = context.channel()
         val client = MapleClient(session)
 
-        val hello = HelloHandler.hello(client)
+        val hello = SessionController.hello(client)
         val buffer = context.alloc().buffer()
         hello.packet(buffer)
 

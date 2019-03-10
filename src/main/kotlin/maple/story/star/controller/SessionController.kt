@@ -1,10 +1,10 @@
-package maple.story.star.handler
+package maple.story.star.controller
 
 import maple.story.star.client.MapleClient
 import maple.story.star.constant.MapleVersion
 import maple.story.star.message.outbound.HelloOutbound
 
-object HelloHandler {
+object SessionController {
 
     fun hello(
         client: MapleClient

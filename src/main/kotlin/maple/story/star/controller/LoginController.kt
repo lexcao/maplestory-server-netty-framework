@@ -1,4 +1,4 @@
-package maple.story.star.handler
+package maple.story.star.controller
 
 import maple.story.star.client.MapleClient
 import maple.story.star.code.Recv
@@ -10,11 +10,11 @@ import maple.story.star.message.outbound.LoginAuthOutbound
 import maple.story.star.message.outbound.LoginOutbound
 import maple.story.star.netty.action.Action
 import maple.story.star.netty.action.MapleAction
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Controller
 import kotlin.random.Random
 
-@Service
-class LoginHandler : MapleAction {
+@Controller
+class LoginController : MapleAction {
 
     /**
      * 连接到服务器

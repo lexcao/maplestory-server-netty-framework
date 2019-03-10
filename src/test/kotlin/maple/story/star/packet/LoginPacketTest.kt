@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import io.netty.channel.socket.nio.NioSocketChannel
 import maple.story.star.client.MapleClient
-import maple.story.star.handler.HelloHandler
+import maple.story.star.controller.SessionController
 import maple.story.star.message.inbound.LoginInbound
 import maple.story.star.netty.domain.MaplePacket
 import maple.story.star.netty.extension.print
@@ -76,7 +76,7 @@ class LoginPacketTest {
 
     @Test
     fun `Response in hello packet`() {
-        val hello = HelloHandler.hello(
+        val hello = SessionController.hello(
             MapleClient(session = NioSocketChannel())
         )
         val packet = Unpooled.buffer()

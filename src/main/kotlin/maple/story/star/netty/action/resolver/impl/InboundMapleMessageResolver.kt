@@ -2,7 +2,7 @@ package maple.story.star.netty.action.resolver.impl
 
 import io.netty.buffer.ByteBuf
 import maple.story.star.client.MapleClient
-import maple.story.star.message.inbound.InboundMapleMessage
+import maple.story.star.message.InboundMapleMessage
 import maple.story.star.netty.action.resolver.ArgumentResolver
 import org.springframework.stereotype.Component
 import kotlin.reflect.KFunction

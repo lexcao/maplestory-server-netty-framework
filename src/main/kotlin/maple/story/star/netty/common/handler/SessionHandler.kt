@@ -20,17 +20,6 @@ class SessionHandler : ChannelInboundHandlerAdapter() {
     override fun channelActive(context: ChannelHandlerContext) {
         val ip = context.ip()
 
-        // TODO block ip here
-        // if () context.get().close() return
-
-        // TODO limit ip
-        limit(ip)
-
-//        if (isShutDown()) {
-//            context.channel().close()
-//            return
-//        }
-
         val session = context.channel()
         val client = MapleClient(session)
 
@@ -45,16 +34,6 @@ class SessionHandler : ChannelInboundHandlerAdapter() {
 
         val server = context.server()
         logger.info("[${server.name}] Session : ip[{}]", ip)
-    }
-
-    /**
-     *  同一个 IP 链接限流
-     */
-    private fun limit(ip: String) {
-        // 过滤本地
-        if ("127.0.0.1" == ip) {
-            return
-        }
     }
 
     override fun channelInactive(ctx: ChannelHandlerContext) {

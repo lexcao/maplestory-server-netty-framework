@@ -4,6 +4,11 @@ import maple.story.star.client.MapleClient
 import maple.story.star.constant.MapleVersion
 import maple.story.star.message.outbound.HelloOutbound
 
+/**
+ *  handle channel active
+ *  send AES IV(initial vector) to maple client
+ *  used for packet encrypt and decrypt
+ */
 object SessionController {
 
     fun hello(

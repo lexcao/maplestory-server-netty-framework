@@ -2,6 +2,10 @@ package maple.story.star.netty.crypt
 
 import javax.crypto.spec.SecretKeySpec
 
+/**
+ *  copy from MapleAESOFB.java
+ *  do not change this file
+ */
 object SecretKeySpecFactory {
 
     fun get(version: Int): SecretKeySpec {

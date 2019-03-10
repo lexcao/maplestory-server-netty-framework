@@ -4,6 +4,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 
+/**
+ *  load properties from file
+ */
 @Configuration
 @PropertySource("classpath:config/server/login.yml", encoding = "UTF-8")
 @ConfigurationProperties
@@ -19,7 +22,7 @@ class LoginConfig {
 
     var eventMessage: String = "Have fun!"
 
-    var message: String = "游戏置顶公告"
+    var message: String = "message on the top of screen"
 
     var flag: Int = 0
 

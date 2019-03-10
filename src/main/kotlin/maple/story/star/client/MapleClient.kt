@@ -13,8 +13,8 @@ import kotlin.random.Random
 
 class MapleClient(
     private val session: Channel,
-    val channelId: Int = -1,
-    val worldId: Int = -1
+    val channelId: Int = -1, // check it used for
+    val worldId: Int = -1 // check it used for
 ) {
     private val aes: MapleAES = MapleAES()
     private val sessionId: Long = Random.nextLong()
@@ -73,17 +73,10 @@ class MapleClient(
         allShutdown: Boolean
     ) {
         TODO("$inCashServer,$inChannelServer,$allShutdown")
-        // 断线太多逻辑，卧槽
     }
 
-    fun login() {
-
-    }
-
-    fun doLogin(): AuthReplyEnum {
-        val init = AuthReplyEnum.ACCOUNT_NOT_LANDED
-        println(init)
-        return AuthReplyEnum.LOGIN_SUCCESSFUL
+    fun login(): AuthReplyEnum {
+        TODO("do login")
     }
 
 }

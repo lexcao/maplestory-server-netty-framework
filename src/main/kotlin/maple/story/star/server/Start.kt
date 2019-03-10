@@ -37,8 +37,8 @@ class Start(
         // TODO skills
         // TODO character info
         // TODO rewards
-        // TODO 角色卡
-        // TODO 竞速排行榜
+        // TODO character cards
+        // TODO player rank of speed run
         // TODO trade
 
         servers.map(MapleServer::startup)

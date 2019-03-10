@@ -2,6 +2,7 @@ package maple.story.star.message.outbound
 
 import io.netty.buffer.ByteBuf
 import maple.story.star.code.Send
+import maple.story.star.message.OutboundMapleMessage
 import maple.story.star.netty.extension.writeAscii
 import java.text.SimpleDateFormat
 import java.util.Date

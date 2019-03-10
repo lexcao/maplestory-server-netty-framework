@@ -1,6 +1,7 @@
 package maple.story.star.message.inbound
 
 import io.netty.buffer.ByteBuf
+import maple.story.star.message.InboundMapleMessage
 import maple.story.star.netty.extension.readAscii
 
 data class ClientErrorMessageInbound(

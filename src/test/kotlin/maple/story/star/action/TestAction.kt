@@ -1,10 +1,12 @@
-package maple.story.star.netty.action
+package maple.story.star.action
 
 import io.netty.buffer.ByteBuf
 import maple.story.star.client.MapleClient
 import maple.story.star.code.Recv
 import maple.story.star.message.inbound.LoginInbound
 import maple.story.star.message.outbound.LoginOutbound
+import maple.story.star.netty.action.Action
+import maple.story.star.netty.action.MapleAction
 
 //@Service
 class TestAction : MapleAction {
@@ -42,5 +44,6 @@ class TestAction : MapleAction {
         println("triple")
         println(login)
         println(data)
+        println(client)
     }
 }

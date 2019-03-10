@@ -11,6 +11,10 @@ import javax.crypto.Cipher
 import javax.crypto.IllegalBlockSizeException
 import kotlin.experimental.xor
 
+/**
+ *  copy from MapleAESOFB.java
+ *  but group send and recv together
+ */
 class MapleAES {
 
     // 143 == 8F 00 == 36608
@@ -30,45 +34,18 @@ class MapleAES {
         val iv = recvIV.iv
         val version = recvIV.version
         // [69. 69] packet id
-        // FIXME just for packet id , need fix
+        // FIXME just for packet id
         val packetArray = intArrayOf(
             (id shr 8) and 0xFF,
             (id shr 0) and 0xFF
         )
-        // maple version 143
+        val a1 = (packetArray[0] xor iv[2]) and 0xFF
 
-        // ((((packet[0] ^ iv[2]) & 0xFF) ==
-        // packet[0] 69
-        // 0110 1001
-        // iv[2] 122
-        // 0111 1010
-        // xor ^
-        // 0001 0011
-        // and & 1111 1111
-        // 19
-        val a1 = (packetArray[0] xor iv[2]) and 0xFF// 19
+        val a2 = (version shr 8) and 0xFF
 
-        // ((mapleVersion >> 8) & 0xFF))
-        // version 8F
-        // 1000 1111
-        // >> 8
-        val a2 = (version shr 8) and 0xFF // 0
-        // &&
+        val b1 = (packetArray[1] xor iv[3]) and 0xFF
 
-        // (((packet[1] ^ iv[3]) & 0xFF) ==
-        // packet[1] 69
-        // 0110 1001
-        // iv[3] = 33
-        // 0011 0011
-        // oxr ^
-        // 0101 1010
-        // and & 1111 1111
-        // 0101 1010
-        // 0x5A
-        val b1 = (packetArray[1] xor iv[3]) and 0xFF // 0x5A
-
-        // (mapleVersion & 0xFF)));
-        val b2 = version and 0xFF // 8F
+        val b2 = version and 0xFF
 
         return a1 == a2 && b1 == b2
     }

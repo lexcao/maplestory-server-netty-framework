@@ -17,7 +17,7 @@ import kotlin.random.Random
 class LoginController : MapleAction {
 
     /**
-     * 连接到服务器
+     *  connect to server
      */
     @Action(Recv.CLIENT_HELLO)
     fun hello(hello: ClientHelloInbound, client: MapleClient) {
@@ -30,7 +30,7 @@ class LoginController : MapleAction {
     }
 
     /**
-     * RSA 验证
+     *  auth with rsa
      */
     @Action(Recv.RSA_KEY)
     fun rsa(): LoginAuthOutbound {
@@ -40,18 +40,17 @@ class LoginController : MapleAction {
     }
 
     /**
-     * 请求连接
+     *  request connection
      */
     @Action(Recv.REQUEST_CONNECTION)
     fun connection(): ConnectionOutbound = ConnectionOutbound()
 
 
     /**
-     * 登录
+     *  login
      */
     @Action(Recv.LOGIN)
     fun login(login: LoginInbound): LoginOutbound {
-        println("login action called")
-        return LoginOutbound("test")
+        TODO("login logic")
     }
 }

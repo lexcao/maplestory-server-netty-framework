@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
-import maple.story.star.message.outbound.OutboundMapleMessage
+import maple.story.star.message.OutboundMapleMessage
 import maple.story.star.netty.action.ActionProcessor
 import maple.story.star.netty.domain.MaplePacket
 import maple.story.star.netty.extension.client

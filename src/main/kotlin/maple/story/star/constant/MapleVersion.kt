@@ -3,6 +3,10 @@ package maple.story.star.constant
 import maple.story.star.netty.extension.shortLE
 
 
+/**
+ *  maple client version
+ *  used for aes
+ */
 object MapleVersion {
 
     const val INT: Int = 143
